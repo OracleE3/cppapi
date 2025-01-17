@@ -1,7 +1,7 @@
 #******************************************************************************************************
 #  CMakeLists.txt - Gbtc
 #
-#  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+#  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 #
 #  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 #  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.5)
 project (sttp)
 
 set (HEADER_OUTPUT_DIRECTORY Include/sttp)
