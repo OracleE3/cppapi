@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Vscode
+.vscode/
+
 # User-specific files
 *.suo
 *.user
@@ -19,7 +22,7 @@
 [Rr]eleases/
 x64/
 x86/
-bld/
+build/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
@@ -329,3 +332,7 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /src/enc_temp_folder/
+
+# pixi environments
+.pixi
+*.egg-info
