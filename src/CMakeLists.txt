@@ -448,7 +448,7 @@ endif()
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 
 # Build STTP library
-add_library (sttp ${STTP_SOURCE_FILES})
+add_library (sttp SHARED ${STTP_SOURCE_FILES})
 target_link_libraries (sttp pthread m z bz2 boost_system boost_thread boost_date_time boost_iostreams boost_chrono)
 
 # Install headers and library
