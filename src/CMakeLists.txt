@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required (VERSION 3.15)
 project (sttp)
 
 set (HEADER_OUTPUT_DIRECTORY Include/sttp)
@@ -450,6 +450,10 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 # Build STTP library
 add_library (sttp SHARED ${STTP_SOURCE_FILES})
 target_link_libraries (sttp pthread m z bz2 boost_system boost_thread boost_date_time boost_iostreams boost_chrono)
+
+# Nanobind
+nanobind_add_module(py_sttp "bindings/py_sttp.cpp")
+target_link_libraries(py_sttp PRIVATE sttp)
 
 # Install headers and library
 install (DIRECTORY ${PROJECT_BINARY_DIR}/${HEADER_OUTPUT_DIRECTORY} DESTINATION include)
