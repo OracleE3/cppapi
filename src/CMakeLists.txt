@@ -472,55 +472,55 @@ file (COPY "samples/FilterExpressionTests/MetadataSample1.xml" DESTINATION ${CMA
 file (COPY "samples/FilterExpressionTests/MetadataSample2.xml" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 # AdvancedPublish sample
-add_executable (AdvancedPublish EXCLUDE_FROM_ALL samples/AdvancedPublish/AdvancedPublish.cpp samples/AdvancedPublish/GenHistory.cpp samples/AdvancedPublish/TemporalSubscriber.cpp)
+add_executable (AdvancedPublish samples/AdvancedPublish/AdvancedPublish.cpp samples/AdvancedPublish/GenHistory.cpp samples/AdvancedPublish/TemporalSubscriber.cpp)
 target_link_libraries (AdvancedPublish sttp)
 
 # AdvancedSubscribe sample
-add_executable (AdvancedSubscribe EXCLUDE_FROM_ALL samples/AdvancedSubscribe/AdvancedSubscribe.cpp)
+add_executable (AdvancedSubscribe samples/AdvancedSubscribe/AdvancedSubscribe.cpp)
 target_link_libraries (AdvancedSubscribe sttp)
 
 # AverageFrequencyCalculator sample
-add_executable (AverageFrequencyCalculator EXCLUDE_FROM_ALL samples/AverageFrequencyCalculator/AverageFrequencyCalculator.cpp)
+add_executable (AverageFrequencyCalculator samples/AverageFrequencyCalculator/AverageFrequencyCalculator.cpp)
 target_link_libraries (AverageFrequencyCalculator sttp)
 
 # DynamicMetadataPublish sample
-add_executable (DynamicMetadataPublish EXCLUDE_FROM_ALL samples/DynamicMetadataPublish/DynamicMetadataPublish.cpp samples/DynamicMetadataPublish/PublisherHandler.cpp)
+add_executable (DynamicMetadataPublish samples/DynamicMetadataPublish/DynamicMetadataPublish.cpp samples/DynamicMetadataPublish/PublisherHandler.cpp)
 target_link_libraries (DynamicMetadataPublish sttp)
 
 # FilterExpressionTests sample
-add_executable (FilterExpressionTests EXCLUDE_FROM_ALL samples/FilterExpressionTests/FilterExpressionTests.cpp)
+add_executable (FilterExpressionTests samples/FilterExpressionTests/FilterExpressionTests.cpp)
 target_link_libraries (FilterExpressionTests sttp boost_filesystem)
 
 # InstancePublish sample
-add_executable (InstancePublish EXCLUDE_FROM_ALL samples/InstancePublish/InstancePublish.cpp samples/InstancePublish/PublisherHandler.cpp)
+add_executable (InstancePublish samples/InstancePublish/InstancePublish.cpp samples/InstancePublish/PublisherHandler.cpp)
 target_link_libraries (InstancePublish sttp)
 
 # InstanceSubscribe sample
-add_executable (InstanceSubscribe EXCLUDE_FROM_ALL samples/InstanceSubscribe/InstanceSubscribe.cpp samples/InstanceSubscribe/SubscriberHandler.cpp)
+add_executable (InstanceSubscribe samples/InstanceSubscribe/InstanceSubscribe.cpp samples/InstanceSubscribe/SubscriberHandler.cpp)
 target_link_libraries (InstanceSubscribe sttp)
 
 # InteropTest sample
-add_executable (InteropTest EXCLUDE_FROM_ALL samples/InteropTest/InteropTest.cpp samples/InteropTest/SubscriberHandler.cpp)
+add_executable (InteropTest samples/InteropTest/InteropTest.cpp samples/InteropTest/SubscriberHandler.cpp)
 target_link_libraries (InteropTest sttp)
 
 # LatencyTest sample
-add_executable (LatencyTest EXCLUDE_FROM_ALL samples/LatencyTest/LatencyTest.cpp samples/LatencyTest/SubscriberHandler.cpp)
+add_executable (LatencyTest samples/LatencyTest/LatencyTest.cpp samples/LatencyTest/SubscriberHandler.cpp)
 target_link_libraries (LatencyTest sttp)
 
 # ReversePublish sample
-add_executable (ReversePublish EXCLUDE_FROM_ALL samples/ReversePublish/ReversePublish.cpp samples/ReversePublish/PublisherHandler.cpp)
+add_executable (ReversePublish samples/ReversePublish/ReversePublish.cpp samples/ReversePublish/PublisherHandler.cpp)
 target_link_libraries (ReversePublish sttp)
 
 # ReverseSubscribe sample
-add_executable (ReverseSubscribe EXCLUDE_FROM_ALL samples/ReverseSubscribe/ReverseSubscribe.cpp samples/ReverseSubscribe/SubscriberHandler.cpp)
+add_executable (ReverseSubscribe samples/ReverseSubscribe/ReverseSubscribe.cpp samples/ReverseSubscribe/SubscriberHandler.cpp)
 target_link_libraries (ReverseSubscribe sttp)
 
 # SimplePublish sample
-add_executable (SimplePublish EXCLUDE_FROM_ALL samples/SimplePublish/SimplePublish.cpp)
+add_executable (SimplePublish samples/SimplePublish/SimplePublish.cpp)
 target_link_libraries (SimplePublish sttp)
 
 # SimpleSubscribe sample
-add_executable (SimpleSubscribe EXCLUDE_FROM_ALL samples/SimpleSubscribe/SimpleSubscribe.cpp)
+add_executable (SimpleSubscribe samples/SimpleSubscribe/SimpleSubscribe.cpp)
 target_link_libraries (SimpleSubscribe sttp)
 
 # Build with 'make samples'
