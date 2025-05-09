@@ -242,6 +242,7 @@ set (STTP_HEADER_FILES
     "lib/utf8/core.h"
     "lib/utf8/cpp11.h"
     "lib/utf8/unchecked.h"
+    "lib/Python.hpp"
 )
 
 set (STTP_SOURCE_FILES
@@ -415,6 +416,7 @@ set (STTP_SOURCE_FILES
     "lib/transport/tssc/TSSCEncoder.cpp"
     "lib/transport/tssc/TSSCDecoder.cpp"
     "lib/transport/tssc/TSSCPointMetadata.cpp"
+    "lib/Python.cpp"
 )
 
 # Option to choose whether to build static or shared libraries
@@ -452,7 +454,7 @@ add_library (sttp SHARED ${STTP_SOURCE_FILES})
 target_link_libraries (sttp pthread m z bz2 boost_system boost_thread boost_date_time boost_iostreams boost_chrono)
 
 # Nanobind
-nanobind_add_module(py_sttp "bindings/py_sttp.cpp")
+nanobind_add_module(py_sttp bindings/py_sttp.cpp)
 target_link_libraries(py_sttp PRIVATE sttp)
 
 # Install headers and library

@@ -1,41 +1,14 @@
 #include <iostream>
 
 #include <nanobind/nanobind.h>
+#include <nanobind/stl/shared_ptr.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/vector.h>
 
-#include "../lib/transport/DataPublisher.h"
-#include "../lib/transport/DataSubscriber.h"
+#include "../lib/Python.hpp"
 
 namespace nb = nanobind;
 using namespace nb::literals;
-
-using namespace sttp;
-using namespace sttp::data;
-using namespace sttp::transport;
-using namespace sttp::filterexpressions;
-
-class PyDataPublisher {
-private:
-    SharedPtr<DataPublisher> publisher;
-
-public:
-    PyDataPublisher() { this->publisher = NewSharedPtr<DataPublisher>(); }
-
-    ~PyDataPublisher() = default;
-
-    void start(const uint16_t port, const bool ipV6 = false) { this->publisher->Start(port, ipV6); }
-    void start(const std::string& ip, const uint16_t port) { this->publisher->Start(ip, port); }
-    void stop() { this->publisher->Stop(); }
-    void connect(const std::string& hostname, uint16_t port) { this->publisher->Connect(hostname, port); }
-    
-    bool is_started() { return this->publisher->IsStarted(); }
-
-    uint16_t get_port() { return this->publisher->GetPort(); }
-    bool is_ipv6() { return this->publisher->IsIPv6(); }
-
-    const Guid& get_node_id() { return this->publisher->GetNodeID(); }
-    void set_node_id(const Guid& value) { this->publisher->SetNodeID(value); }
-};
 
 int add(int a, int b) { return a + b; }
 
@@ -48,21 +21,68 @@ NB_MODULE(py_sttp, m) {
     m.def("add", &add, "a"_a, "b"_a = 1,
           "This function adds two numbers and increments if only one is provided.");
     m.def("process_string", &process_string);
+    nb::class_<PyDataTable>(m, "DataTable")
+        // .def(nb::init<>())
+        .def("__repr__", &PyDataTable::to_string, "Get table as string")
+        .def("__len__", &PyDataTable::row_count, "Allow len() to get the number of rows")
+        .def("name", &PyDataTable::name, "Get the table name string")
+        .def(
+            "column",
+            nb::overload_cast<const std::string&>(&PyDataTable::column),
+            "Get a column by string name"
+        )
+        .def(
+            "column",
+            nb::overload_cast<int32_t>(&PyDataTable::column),
+            "Get a column by index"
+        )
+        .def("row", &PyDataTable::row, "Get a column by index")
+        .def("column_count", &PyDataTable::column_count, "Get number of columns")
+        .def("row_count", &PyDataTable::row_count, "Get number of rows")
+    ;
+    nb::class_<PyDataRow>(m, "DataRow")
+        // .def(nb::init<>())
+        .def("__repr__", &PyDataRow::to_string, "Get the row as a string")
+        // .def("__len__", [](const PyDataRow& self) { return self.})
+    ;
+    nb::class_<PyDataColumn>(m, "DataColumn")
+        // .def(nb::init<>())
+        .def("__repr__", &PyDataColumn::to_string, "Get the column as a string")
+        .def("name", [](PyDataColumn& self) { return self.name(); }, "Get the column name")
+        .def("type", [](PyDataColumn& self) { return self.type(); }, "Get the column type")
+        .def("expression", [](PyDataColumn& self) { return self.expression(); }, "Get the column expression")
+        .def("computed", [](PyDataColumn& self) { return self.computed(); }, "Check whether the column was computed or not")
+        .def("index", [](PyDataColumn& self) { return self.index(); }, "Get the column index")
+    ;
+    nb::class_<PyDataSet>(m, "DataSet")
+        .def(nb::init<>())
+        .def("__repr__", &PyDataSet::to_string, "Print dataset as string")
+        .def("table", &PyDataSet::table, "Get a table by name")
+        .def("tables", &PyDataSet::tables, "Get a list of all tables")
+        .def("table_count", &PyDataSet::table_count, "List the number of tables in the data set")
+        .def("table_names", &PyDataSet::table_names, "Get a table by name")
+        .def(
+            "read_xml",
+            nb::overload_cast<const std::string&>(&PyDataSet::read_xml),
+            "Populate object from an XML file"
+        )
+        // .def_static("from_xml", &PyDataSet::from_xml, "Create a DataSet from an XML file")
+    ;
     nb::class_<PyDataPublisher>(m, "DataPublisher")
         .def(nb::init<>())
         .def(
             "start",
             nb::overload_cast<uint16_t, bool>(&PyDataPublisher::start),
-            "Starts the publisher with just a TCP port"
+            "Starts the ref with just a TCP port"
         )
         .def(
             "start",
             nb::overload_cast<const std::string&, uint16_t>(&PyDataPublisher::start),
-            "Starts the publisher with hostname and port"
+            "Starts the ref with hostname and port"
         )
-        .def("stop", &PyDataPublisher::stop, "Stops the publisher")
+        .def("stop", &PyDataPublisher::stop, "Stops the ref")
         .def("connect", &PyDataPublisher::connect, "Reverse connect to DataSubscriber")
-        .def("is_started", &PyDataPublisher::is_started, "Check if publisher has been started")
+        .def("is_started", &PyDataPublisher::is_started, "Check if ref has been started")
         .def("get_port", &PyDataPublisher::get_port, "Gets the TCP port")
         .def("is_ipv6", &PyDataPublisher::is_ipv6, "Check if address is IPV6")
         .def("get_node_id", &PyDataPublisher::get_node_id, "Gets the node ID")

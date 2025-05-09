@@ -11,3 +11,7 @@ version = "0.1.0"
 [dependencies]
 nanobind = ">=2.7.0,<3"
 python = "3.12.*"
+numpy = ">=2.2.5,<3"
+
+[pypi-dependencies]
+python-dateutil = ">=2.9.0.post0, <3"
