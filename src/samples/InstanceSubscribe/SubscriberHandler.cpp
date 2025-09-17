@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  SubscriberHandler.cpp - Gbtc
 //
-//  Copyright © 2018, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2018, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -164,7 +164,12 @@ void SubscriberHandler::ReceivedNewMeasurements(const vector<MeasurementPtr>& me
 
 void SubscriberHandler::SubscriptionUpdated(const SignalIndexCachePtr& signalIndexCache)
 {
-    StatusMessage("Publisher provided " + ToString(signalIndexCache->Count()) + " measurements in response to subscription.");
+    int numMeasurements = signalIndexCache->Count();
+    StatusMessage("Publisher provided " + ToString(numMeasurements) + " measurements in response to subscription.");
+    for (int i = 0; i < numMeasurements; ++i)
+    {
+        StatusMessage("Signal ID: " + ToString(signalIndexCache->GetSignalID(i)));
+    }
 }
 
 void SubscriberHandler::ConfigurationChanged()

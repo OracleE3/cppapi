@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  InstanceSubscribe.cpp - Gbtc
 //
-//  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -29,7 +29,7 @@ using namespace std;
 using namespace sttp;
 using namespace sttp::transport;
 
-#define TotalInstances 3
+#define TotalInstances 1
 SubscriberHandler* Subscriber[TotalInstances];
 
 int main(int argc, char* argv[])
@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
         {
             case 0:
                 subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType = 'FREQ'");
+                // subscriber->SetFilterExpression(SubscriberInstance::SubscribeAllExpression);
                 break;
             case 1:
                 subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType LIKE '%PHA'");

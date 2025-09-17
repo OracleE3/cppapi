@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  PublisherHandler.cpp - Gbtc
 //
-//  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -69,6 +69,21 @@ void PublisherHandler::ClientDisconnected(const SubscriberConnectionPtr& connect
     StatusMessage("Client \"" + connection->GetConnectionID() + "\" with subscriber ID " + ToString(connection->GetSubscriberID()) + " disconnected...\n\n");
 }
 
+MeasurementMetadataPtr NewMetadata(SignalKind kind, string id, string tag, string acronym, uint16_t index, uint16_t src_index, datetime_t timestamp)
+{
+    MeasurementMetadataPtr meta = NewSharedPtr<MeasurementMetadata>();
+    meta->ID = id;
+    meta->PointTag = tag;
+    meta->SignalID = NewGuid();
+    meta->DeviceAcronym = acronym;
+    meta->Reference.Acronym = acronym;
+    meta->Reference.Kind = kind;
+    meta->Reference.Index = index;
+    meta->PhasorSourceIndex = src_index;
+    meta->UpdatedOn = timestamp;
+    return meta;
+}
+
 void PublisherHandler::DefineMetadata()
 {
     // This sample just generates random Guid measurement and device identifiers - for a production system,
@@ -87,6 +102,13 @@ void PublisherHandler::DefineMetadata()
     device1Metadata->FramesPerSecond = 30;
     device1Metadata->ProtocolName = "STTP";
     device1Metadata->UpdatedOn = timestamp;
+    StatusMessage(
+        "\nNew Device: " +
+        ToString(device1Metadata->Name) + " " +
+        ToString(device1Metadata->Acronym) + " " +
+        ToString(device1Metadata->UniqueID) + " " +
+        "\n"
+    );
 
     m_deviceMetadata.emplace_back(device1Metadata);
 
@@ -94,58 +116,74 @@ void PublisherHandler::DefineMetadata()
     const string& measurementSource = "PPA:";
     int runtimeIndex = 1;
 
-    // Add a frequency measurement
-    MeasurementMetadataPtr measurement1Metadata = NewSharedPtr<MeasurementMetadata>();
-    measurement1Metadata->ID = measurementSource + ToString(runtimeIndex++);
-    measurement1Metadata->PointTag = pointTagPrefix + "FREQ";
-    measurement1Metadata->SignalID = NewGuid();
-    measurement1Metadata->DeviceAcronym = device1Metadata->Acronym;
-    measurement1Metadata->Reference.Acronym = device1Metadata->Acronym;
-    measurement1Metadata->Reference.Kind = SignalKind::Frequency;
-    measurement1Metadata->Reference.Index = 0;
-    measurement1Metadata->PhasorSourceIndex = 0;
-    measurement1Metadata->UpdatedOn = timestamp;
-
-    // Add a dF/dt measurement
-    MeasurementMetadataPtr measurement2Metadata = NewSharedPtr<MeasurementMetadata>();
-    measurement2Metadata->ID = measurementSource + ToString(runtimeIndex++);
-    measurement2Metadata->PointTag = pointTagPrefix + "DFDT";
-    measurement2Metadata->SignalID = NewGuid();
-    measurement2Metadata->DeviceAcronym = device1Metadata->Acronym;
-    measurement2Metadata->Reference.Acronym = device1Metadata->Acronym;
-    measurement2Metadata->Reference.Kind = SignalKind::DfDt;
-    measurement2Metadata->Reference.Index = 0;
-    measurement2Metadata->PhasorSourceIndex = 0;
-    measurement2Metadata->UpdatedOn = timestamp;
-
-    // Add a phase angle measurement
-    MeasurementMetadataPtr measurement3Metadata = NewSharedPtr<MeasurementMetadata>();
-    measurement3Metadata->ID = measurementSource + ToString(runtimeIndex++);
-    measurement3Metadata->PointTag = pointTagPrefix + "VPHA";
-    measurement3Metadata->SignalID = NewGuid();
-    measurement3Metadata->DeviceAcronym = device1Metadata->Acronym;
-    measurement3Metadata->Reference.Acronym = device1Metadata->Acronym;
-    measurement3Metadata->Reference.Kind = SignalKind::Angle;
-    measurement3Metadata->Reference.Index = 1;   // First phase angle
-    measurement3Metadata->PhasorSourceIndex = 1; // Match to Phasor.SourceIndex = 1
-    measurement3Metadata->UpdatedOn = timestamp;
-
-    // Add a phase magnitude measurement
-    MeasurementMetadataPtr measurement4Metadata = NewSharedPtr<MeasurementMetadata>();
-    measurement4Metadata->ID = measurementSource + ToString(runtimeIndex++);
-    measurement4Metadata->PointTag = pointTagPrefix + "VPHM";
-    measurement4Metadata->SignalID = NewGuid();
-    measurement4Metadata->DeviceAcronym = device1Metadata->Acronym;
-    measurement4Metadata->Reference.Acronym = device1Metadata->Acronym;
-    measurement4Metadata->Reference.Kind = SignalKind::Magnitude;
-    measurement4Metadata->Reference.Index = 1;   // First phase magnitude
-    measurement4Metadata->PhasorSourceIndex = 1; // Match to Phasor.SourceIndex = 1
-    measurement4Metadata->UpdatedOn = timestamp;
-
-    m_measurementMetadata.emplace_back(measurement1Metadata);
-    m_measurementMetadata.emplace_back(measurement2Metadata);
-    m_measurementMetadata.emplace_back(measurement3Metadata);
-    m_measurementMetadata.emplace_back(measurement4Metadata);
+    // for (int i = 0; i < 4096; ++i)
+    // {
+    //     SignalKind kind = SignalKind::Unknown;
+    //     string prefix = "";
+    //     switch (i % 4)
+    //     {
+    //         case 0:
+    //             // Add a frequency measurement
+    //             kind = SignalKind::Frequency;
+    //             prefix = pointTagPrefix + "FREQ";
+    //             break;
+    //         case 1:
+    //             // Add a dF/dt measurement
+    //             kind = SignalKind::DfDt;
+    //             prefix = pointTagPrefix + "DFDT";
+    //             break;
+    //         case 2:
+    //             // Add a phase angle measurement
+    //             kind = SignalKind::Angle;
+    //             prefix = pointTagPrefix + "VPHA";
+    //             break;
+    //         case 3:
+    //             // Add a phase magnitude measurement
+    //             kind = SignalKind::Magnitude;
+    //             prefix = pointTagPrefix + "VPHM";
+    //             break;
+    //     }
+    //     m_measurementMetadata.emplace_back(NewMetadata(
+    //         kind,
+    //         measurementSource + ToString(i),
+    //         prefix,
+    //         device1Metadata->Acronym,
+    //         i, i,
+    //         timestamp
+    //     ));
+    // }
+    m_measurementMetadata.emplace_back(NewMetadata(
+        SignalKind::Frequency,
+        measurementSource + ToString(runtimeIndex++),
+        pointTagPrefix + "FREQ",
+        device1Metadata->Acronym,
+        0, 0,
+        timestamp
+    ));
+    m_measurementMetadata.emplace_back(NewMetadata(
+        SignalKind::DfDt,
+        measurementSource + ToString(runtimeIndex++),
+        pointTagPrefix + "DFDT",
+        device1Metadata->Acronym,
+        0, 0,
+        timestamp
+    ));
+    m_measurementMetadata.emplace_back(NewMetadata(
+        SignalKind::Angle,
+        measurementSource + ToString(runtimeIndex++),
+        pointTagPrefix + "VPHA",
+        device1Metadata->Acronym,
+        1, 1,
+        timestamp
+    ));
+    m_measurementMetadata.emplace_back(NewMetadata(
+        SignalKind::Magnitude,
+        measurementSource + ToString(runtimeIndex++),
+        pointTagPrefix + "VPHM",
+        device1Metadata->Acronym,
+        1, 1,
+        timestamp
+    ));
 
     // Add a phasor
     PhasorMetadataPtr phasor1Metadata = NewSharedPtr<PhasorMetadata>();
