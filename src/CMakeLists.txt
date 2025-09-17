@@ -24,11 +24,6 @@
 cmake_minimum_required (VERSION 3.15)
 project (sttp)
 
-set (HEADER_OUTPUT_DIRECTORY Include/sttp)
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY Output)
-set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY Libraries)
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY Libraries)
-
 set (STTP_HEADER_FILES
     "lib/CommonTypes.h"
     "lib/Convert.h"
@@ -450,7 +445,7 @@ endif()
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 
 # Build STTP library
-add_library (sttp SHARED ${STTP_SOURCE_FILES})
+add_library (sttp ${STTP_SOURCE_FILES})
 target_link_libraries (sttp pthread m z bz2 boost_system boost_thread boost_date_time boost_iostreams boost_chrono)
 
 # Nanobind
@@ -465,13 +460,11 @@ install (TARGETS sttp DESTINATION lib)
 # SAMPLE EXECUTABLES #
 ######################
 
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY Samples)
-
 # Copy sample content files
-file (COPY "samples/AdvancedPublish/History.xml" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-file (COPY "samples/SimplePublish/Metadata.xml" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-file (COPY "samples/FilterExpressionTests/MetadataSample1.xml" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-file (COPY "samples/FilterExpressionTests/MetadataSample2.xml" DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+file (COPY "samples/AdvancedPublish/History.xml" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Samples")
+file (COPY "samples/SimplePublish/Metadata.xml" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Samples")
+file (COPY "samples/FilterExpressionTests/MetadataSample1.xml" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Samples")
+file (COPY "samples/FilterExpressionTests/MetadataSample2.xml" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Samples")
 
 # AdvancedPublish sample
 add_executable (AdvancedPublish samples/AdvancedPublish/AdvancedPublish.cpp samples/AdvancedPublish/GenHistory.cpp samples/AdvancedPublish/TemporalSubscriber.cpp)
