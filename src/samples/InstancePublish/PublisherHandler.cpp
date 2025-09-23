@@ -30,6 +30,7 @@ using namespace sttp::transport;
 Mutex PublisherHandler::s_coutLock {};
 
 PublisherHandler::PublisherHandler(string name) : 
+    PublisherInstance(),
     m_name(std::move(name)),
     m_processCount(0L),
     m_publishTimer(Timer::NullPtr),
@@ -225,6 +226,14 @@ bool PublisherHandler::Start(uint16_t port, bool ipV6)
         const int64_t timestamp = RoundToSubsecondDistribution(ToTicks(UtcNow()), 30);
         vector<MeasurementPtr> measurements;
 
+        size_t totalMeasurements = GetTotalMeasurementsSent();
+        StatusMessage(
+            "Creating new set of " +
+            to_string(count) +
+            " measurements - total published " +
+            to_string(totalMeasurements)
+        );
+
         measurements.reserve(count);
 
         // Create new measurement values for publication
@@ -271,7 +280,7 @@ bool PublisherHandler::Start(uint16_t port, bool ipV6)
         const bool showMessage = m_processCount + count >= (m_processCount / interval + 1) * interval && GetTotalMeasurementsSent() > 0;
         m_processCount += count;
 
-        if (showMessage)
+        // if (showMessage)
             StatusMessage(ToString(GetTotalMeasurementsSent()) + " measurements published so far...\n");
     },
     true);

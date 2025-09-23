@@ -449,8 +449,8 @@ add_library (sttp ${STTP_SOURCE_FILES})
 target_link_libraries (sttp pthread m z bz2 boost_system boost_thread boost_date_time boost_iostreams boost_chrono)
 
 # Nanobind
-nanobind_add_module(py_sttp bindings/py_sttp.cpp)
-target_link_libraries(py_sttp PRIVATE sttp)
+# nanobind_add_module(py_sttp bindings/py_sttp.cpp)
+# target_link_libraries(py_sttp PRIVATE sttp)
 
 # Install headers and library
 install (DIRECTORY ${PROJECT_BINARY_DIR}/${HEADER_OUTPUT_DIRECTORY} DESTINATION include)

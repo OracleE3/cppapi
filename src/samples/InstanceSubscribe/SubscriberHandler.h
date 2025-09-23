@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  SubscriberHandler.h - Gbtc
 //
-//  Copyright © 2018, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2018, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -42,6 +42,7 @@ protected:
     void DataStartTime(sttp::datetime_t startTime) override;
     void ReceivedMetadata(const std::vector<uint8_t>& payload) override;
     void ReceivedNewMeasurements(const std::vector<sttp::transport::MeasurementPtr>& measurements) override;
+    void ReceivedNewMeasurements(const sttp::transport::SimpleMeasurement* measurements, int32_t length) override;
     void SubscriptionUpdated(const sttp::transport::SignalIndexCachePtr& signalIndexCache) override;
     void ParsedMetadata() override;
     void ConfigurationChanged() override;

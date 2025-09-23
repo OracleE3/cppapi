@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  SimplePublish.cpp - Gbtc
 //
-//  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -24,6 +24,7 @@
 // ReSharper disable CppClangTidyConcurrencyMtUnsafe
 #include "../../lib/transport/DataPublisher.h"
 #include <iostream>
+#include <boost/uuid/uuid_io.hpp> // Required for to_string
 
 using namespace std;
 using namespace sttp;
@@ -132,6 +133,9 @@ bool RunPublisher(const uint16_t port)
             const int64_t timestamp = RoundToSubsecondDistribution(ToTicks(UtcNow()), 30);
             vector<MeasurementPtr> measurements;
 
+            size_t totalMeasurements = Publisher->GetTotalMeasurementsSent();
+            cout << "Creating new set of " << count << " measurements - total published " << totalMeasurements << endl;
+
             measurements.reserve(count);
 
             // Create new measurement values for publication
@@ -140,6 +144,7 @@ bool RunPublisher(const uint16_t port)
                 const MeasurementMetadataPtr metadata = MeasurementsToPublish[i];
                 MeasurementPtr measurement = NewSharedPtr<Measurement>();
 
+                cout << "  Measurement SignalID " << to_string(metadata->SignalID) << endl;
                 measurement->SignalID = metadata->SignalID;
                 measurement->Timestamp = timestamp;
                 measurement->Value = static_cast<float64_t>(rand());

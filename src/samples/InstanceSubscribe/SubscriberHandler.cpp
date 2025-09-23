@@ -31,6 +31,7 @@ using namespace sttp::transport;
 Mutex SubscriberHandler::s_coutLock{};
 
 SubscriberHandler::SubscriberHandler(string name) :
+    SubscriberInstance(),
     m_name(std::move(name)),
     m_lastMessage(DateTime::MinValue)
 {
@@ -100,66 +101,74 @@ void SubscriberHandler::ParsedMetadata()
 // ReSharper disable CppDeclaratorNeverUsed
 void SubscriberHandler::ReceivedNewMeasurements(const vector<MeasurementPtr>& measurements)
 {   
-    static constexpr float32_t interval = 2.0; // Show status every 2 seconds
-    static constexpr uint64_t maxToShow = 20ULL;
-    const uint64_t measurementCount = measurements.size();
+    StatusMessage("Received " + ToString(measurements.size()) + " measurements...");
+    SubscriberInstance::ReceivedNewMeasurements(measurements);
+    // static constexpr float32_t interval = 2.0; // Show status every 2 seconds
+    // static constexpr uint64_t maxToShow = 20ULL;
+    // const uint64_t measurementCount = measurements.size();
 
-    if (TimeSince(m_lastMessage) < interval)
-        return;
+    // if (TimeSince(m_lastMessage) < interval)
+    //     return;
 
-    m_lastMessage = UtcNow();
-    uint64_t shown = 0ULL;
-    stringstream message;
+    // m_lastMessage = UtcNow();
+    // uint64_t shown = 0ULL;
+    // stringstream message;
 
-    message << GetTotalMeasurementsReceived() << " measurements received so far..." << endl;
+    // message << GetTotalMeasurementsReceived() << " measurements received so far..." << endl;
 
-    if (measurementCount > 0)
-        message << ToString(measurements[0]->GetDateTime()) << endl;
+    // if (measurementCount > 0)
+    //     message << ToString(measurements[0]->GetDateTime()) << endl;
 
-    message << "\tRuntime-ID\tMeta-data ID\tValue\t\tType\tSignalID" << endl;
+    // message << "\tRuntime-ID\tMeta-data ID\tValue\t\tType\tSignalID" << endl;
 
-    // Start processing measurements
-    for (auto &measurement : measurements)
-    {
-        if (shown++ > maxToShow)
-            break;
+    // // Start processing measurements
+    // for (auto &measurement : measurements)
+    // {
+    //     if (shown++ > maxToShow)
+    //         break;
 
-        // Get adjusted value
-        const float64_t value = measurement->AdjustedValue();
+    //     // Get adjusted value
+    //     const float64_t value = measurement->AdjustedValue();
 
-        // Get timestamp
-        datetime_t timestamp = measurement->GetDateTime();
+    //     // Get timestamp
+    //     datetime_t timestamp = measurement->GetDateTime();
 
-        // Handle per measurement quality flags
-        MeasurementStateFlags qualityFlags = measurement->Flags;
+    //     // Handle per measurement quality flags
+    //     MeasurementStateFlags qualityFlags = measurement->Flags;
 
-        ConfigurationFramePtr configurationFrame;
-        MeasurementMetadataPtr measurementMetadata;
+    //     ConfigurationFramePtr configurationFrame;
+    //     MeasurementMetadataPtr measurementMetadata;
 
-        // Find associated configuration for measurement
-        if (TryFindTargetConfigurationFrame(measurement->SignalID, configurationFrame))
-        {
-            // Lookup measurement metadata - it's faster to find metadata from within configuration frame
-            if (TryGetMeasurementMetadataFromConfigurationFrame(measurement->SignalID, configurationFrame, measurementMetadata))
-            {
-                const SignalReference& reference = measurementMetadata->Reference;
+    //     // Find associated configuration for measurement
+    //     if (TryFindTargetConfigurationFrame(measurement->SignalID, configurationFrame))
+    //     {
+    //         // Lookup measurement metadata - it's faster to find metadata from within configuration frame
+    //         if (TryGetMeasurementMetadataFromConfigurationFrame(measurement->SignalID, configurationFrame, measurementMetadata))
+    //         {
+    //             const SignalReference& reference = measurementMetadata->Reference;
 
-                // reference.Acronym  << target device acronym 
-                // reference.Kind     << kind of signal (see SignalKind in "Types.h"), like Frequency, Angle, etc
-                // reference.Index    << for Phasors, Analogs and Digitals - this is the ordered "index"
+    //             // reference.Acronym  << target device acronym 
+    //             // reference.Kind     << kind of signal (see SignalKind in "Types.h"), like Frequency, Angle, etc
+    //             // reference.Index    << for Phasors, Analogs and Digitals - this is the ordered "index"
 
-                message << '\t' << measurement->ID << '\t' << '\t' << measurementMetadata->ID << '\t' << '\t' << measurement->Value << fixed << setprecision(3) << '\t' << '\t' << SignalKindAcronym[static_cast<int32_t>(reference.Kind)] << '\t' << ToString(measurement->SignalID) << endl;
-            }
-        }
-        //else if (TryGetMeasurementMetdata(measurement->SignalID, measurementMetadata))
-        //{
-        //    // Received measurement is not part of a defined configuration frame, e.g., a statistic
-        //    const SignalReference& reference = measurementMetadata->Reference;
-        //}
-    }
+    //             message << '\t' << measurement->ID << '\t' << '\t' << measurementMetadata->ID << '\t' << '\t' << measurement->Value << fixed << setprecision(3) << '\t' << '\t' << SignalKindAcronym[static_cast<int32_t>(reference.Kind)] << '\t' << ToString(measurement->SignalID) << endl;
+    //         }
+    //     }
+    //     //else if (TryGetMeasurementMetdata(measurement->SignalID, measurementMetadata))
+    //     //{
+    //     //    // Received measurement is not part of a defined configuration frame, e.g., a statistic
+    //     //    const SignalReference& reference = measurementMetadata->Reference;
+    //     //}
+    // }
 
-    // Only display messages every few seconds
-    StatusMessage(message.str());
+    // // Only display messages every few seconds
+    // StatusMessage(message.str());
+}
+
+void SubscriberHandler::ReceivedNewMeasurements(const SimpleMeasurement* measurements, int32_t length)
+{
+    StatusMessage("Received " + ToString(length) + " measurements...");
+    SubscriberInstance::ReceivedNewMeasurements(measurements, length);
 }
 
 void SubscriberHandler::SubscriptionUpdated(const SignalIndexCachePtr& signalIndexCache)

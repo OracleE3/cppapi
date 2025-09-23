@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  SimpleSubscribe.cpp - Gbtc
 //
-//  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -168,6 +168,8 @@ void ProcessMeasurements(const DataSubscriber* source, const vector<MeasurementP
     const bool showMessage = (processCount + measurementCount >= (processCount / interval + 1) * interval);
 
     processCount += measurementCount;
+
+    cout << "Processing " << measurements.size() << " measurements" << endl;
 
     // Only display messages every few seconds
     if (showMessage)

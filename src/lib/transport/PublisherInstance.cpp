@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  PublisherInstance.cpp - Gbtc
 //
-//  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -475,6 +475,7 @@ void PublisherInstance::PublishMeasurements(const vector<Measurement>& measureme
 
 void PublisherInstance::PublishMeasurements(const vector<MeasurementPtr>& measurements) const
 {
+    cout << "Publishing " << measurements.size() << " measurements" << endl;
     m_publisher->PublishMeasurements(measurements);
 }
 

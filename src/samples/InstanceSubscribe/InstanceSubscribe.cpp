@@ -61,25 +61,26 @@ int main(int argc, char* argv[])
         SubscriberHandler* subscriber = new SubscriberHandler("Subscriber " + ToString(i + 1));
         subscriber->Initialize(hostname, port + static_cast<uint16_t>(usePortOffset ? i : 0));
 
-        switch (i)
-        {
-            case 0:
-                subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType = 'FREQ'");
-                // subscriber->SetFilterExpression(SubscriberInstance::SubscribeAllExpression);
-                break;
-            case 1:
-                subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType LIKE '%PHA'");
+        subscriber->SetFilterExpression(SubscriberInstance::SubscribeAllExpression);
+        // switch (i)
+        // {
+        //     case 0:
+        //         // subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType = 'FREQ'");
+        //         subscriber->SetFilterExpression(SubscriberInstance::SubscribeAllExpression);
+        //         break;
+        //     case 1:
+        //         subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType LIKE '%PHA'");
                 
-                // In this example we also specify a meta-data filtering expression:
-                subscriber->SetMetadataFilters(SubscriberInstance::FilterMetadataStatsExpression);
-                break;
-            case 2:
-                subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType LIKE '%PHM'");
-                break;
-            default:
-                subscriber->SetFilterExpression(SubscriberInstance::SubscribeAllNoStatsExpression);
-                break;
-        }
+        //         // In this example we also specify a meta-data filtering expression:
+        //         subscriber->SetMetadataFilters(SubscriberInstance::FilterMetadataStatsExpression);
+        //         break;
+        //     case 2:
+        //         subscriber->SetFilterExpression("FILTER ActiveMeasurements WHERE SignalType LIKE '%PHM'");
+        //         break;
+        //     default:
+        //         subscriber->SetFilterExpression(SubscriberInstance::SubscribeAllNoStatsExpression);
+        //         break;
+        // }
 
         subscriber->ConnectAsync();
         Subscriber[i] = subscriber;

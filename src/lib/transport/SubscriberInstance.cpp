@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  SubscriberInstance.cpp - Gbtc
 //
-//  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -62,6 +62,7 @@ SubscriberInstance::SubscriberInstance() :
     m_subscriber->RegisterDataStartTimeCallback(&HandleDataStartTime);
     m_subscriber->RegisterMetadataCallback(&HandleMetadata);
     m_subscriber->RegisterSubscriptionUpdatedCallback(&HandleSubscriptionUpdated);
+    cout << "Register HandleNewMeasurements" << endl;
     m_subscriber->RegisterNewMeasurementsCallback(&HandleNewMeasurements);
     m_subscriber->RegisterConfigurationChangedCallback(&HandleConfigurationChanged);
     m_subscriber->RegisterConnectionEstablishedCallback(&HandleConnectionEstablished);
@@ -1380,6 +1381,7 @@ void SubscriberInstance::HandleSubscriptionUpdated(const DataSubscriber* source,
 
 void SubscriberInstance::HandleNewMeasurements(const DataSubscriber* source, const vector<MeasurementPtr>& measurements)
 {
+    cout << "Handle new measurement" << endl;
     SubscriberInstance* instance = static_cast<SubscriberInstance*>(source->GetUserData());
 
     if (instance == nullptr)
