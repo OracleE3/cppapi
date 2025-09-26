@@ -329,3 +329,6 @@ ASALocalRun/
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
 /src/enc_temp_folder/
+
+build/
+!build/tools/EmbedFile.exe
