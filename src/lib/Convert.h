@@ -34,7 +34,7 @@ namespace sttp
     datetime_t FromUnixTime(time_t unixSOC, uint16_t milliseconds);
 
     // Convert Unix second of century and microseconds to DateTime
-    datetime_t FromUnixTimeMicro(time_t unixSOC, uint16_t microseconds);
+    datetime_t FromUnixTimeMicro(time_t unixSOC, uint32_t microseconds);
 
     // Converts a timestamp, in Ticks, to DateTime
     datetime_t FromTicks(int64_t ticks);
