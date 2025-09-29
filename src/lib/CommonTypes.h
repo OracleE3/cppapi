@@ -1,7 +1,7 @@
 //******************************************************************************************************
 //  CommonTypes.h - Gbtc
 //
-//  Copyright © 2019, Grid Protection Alliance.  All Rights Reserved.
+//  Copyright ï¿½ 2019, Grid Protection Alliance.  All Rights Reserved.
 //
 //  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
 //  the NOTICE file distributed with this work for additional information regarding copyright ownership.
@@ -324,13 +324,13 @@ namespace sttp
     };
 
     // std::unordered_map string hasher
-    struct StringHash : std::unary_function<std::string, size_t>
+    struct StringHash
     {
         size_t operator()(const std::string& value) const;
     };
 
     // std::unordered_map string equality tester
-    struct StringEqual : std::binary_function<std::string, std::string, bool>
+    struct StringEqual
     {
         bool operator()(const std::string& left, const std::string& right) const;
     };
@@ -339,7 +339,7 @@ namespace sttp
     using StringMap = std::unordered_map<std::string, T, StringHash, StringEqual>;
 
     // std::map string comparer
-    struct StringComparer : std::binary_function<std::string, std::string, bool>
+    struct StringComparer
     {
         bool operator()(const std::string& left, const std::string& right) const;
     };
